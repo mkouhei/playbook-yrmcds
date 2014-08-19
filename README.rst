@@ -13,6 +13,7 @@ Requirements
 
 * Edit inventory file `hosts` and variable file `group_vars/hosts`.
 * Generate a new authkey formatted binary on local.
+* Install packages on local as follows;
 
   * Git
   * ansible (>= 1.5)
