@@ -14,8 +14,17 @@ Requirements
 * Edit inventory file `hosts` and variable file `group_vars/hosts`.
 * Generate a new authkey formatted binary on local.
 
+  * Git
   * ansible (>= 1.5)
   * python-apt
+
+* git clone this repository, initialize library directory as submodule.::
+
+    $ git clone https://github.com/mkouhei/playbook-yrmcds.git
+    $ cd playbook-yrmcds
+    $ git submodule init
+    $ git submodule update
+    
 
 Playbooks
 ---------
