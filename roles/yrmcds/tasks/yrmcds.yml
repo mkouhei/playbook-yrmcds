@@ -23,6 +23,8 @@
   connection: local
   sudo: no
   register: ip_version
+  tags:
+    - yrmcds
 
 - name: be sure yrmcds is configured
   template: src=yrmcds.conf.j2 dest=/etc/yrmcds.conf

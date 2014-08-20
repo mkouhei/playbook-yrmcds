@@ -26,7 +26,13 @@ Requirements
     $ cd playbook-yrmcds
     $ git submodule init
     $ git submodule update
-    
+
+Restrictions
+------------
+
+* You must configure the network with IPv4/IPv6 dual stack,
+  even though in such a case of using IPv6 link-local address at virtual_ip.
+  Because of using IPv6 only, slave servers cannot run yrmcdsd.
 
 Playbooks
 ---------

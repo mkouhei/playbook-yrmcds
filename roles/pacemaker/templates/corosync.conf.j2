@@ -19,7 +19,7 @@ totem {
         bindnetaddr: {{ ansible_eth0.ipv4.address }}
 {% elif ip_version.stdout == "6" %}
 {% for i in ansible_eth0.ipv6 %}
-{% if i.scope == "link" %}
+{% if i.scope == "global" %}
         bindnetaddr: {{ i.address }}
 {% endif %}
 {% endfor %}
@@ -59,7 +59,7 @@ nodelist {
 {% elif ip_version.stdout == "6" %}
 {% for host in groups["hosts"] %}
 {% for i in hostvars[host]['ansible_eth0']['ipv6'] %}
-{% if i.scope == 'link' %}
+{% if i.scope == 'global' %}
    node {
         ring0_addr: {{ i.address }}
         nodeid: {{ hostvars[host]['nodeid'] }}
