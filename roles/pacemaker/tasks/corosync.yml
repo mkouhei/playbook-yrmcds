@@ -1,0 +1,43 @@
+---
+# roles/pacemaker/tasks/corosync.yml
+
+- name: be sure packages are installed
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - corosync
+  tags:
+    - packages
+    - corosync
+
+- name: be sure corosync is enabled
+  copy: src=corosync dest=/etc/default/corosync
+  notify: restart corosync
+  tags:
+    - configure
+    - corosync
+
+- name: be sure check IP address version of virtual_ip
+  shell: |
+    python -c "import netaddr; print(netaddr.IPAddress('{{ virtual_ip }}').version)"
+  connection: local
+  sudo: no
+  register: ip_version
+
+- name: be sure corosync is configured
+  template: src=corosync.conf.j2 dest=/etc/corosync/corosync.conf
+  tags:
+    - configure
+    - corosync
+
+- name: be sure corosync authkey is configured
+  copy: src=authkey dest=/etc/corosync/authkey owner=root group=root mode=0400
+  notify:
+    - restart corosync
+  tags:
+    - configure
+    - corosync
+
+- name: be sure corosync is enabled
+  service: name=corosync state=running enabled=yes
+  tags:
+    - corosync

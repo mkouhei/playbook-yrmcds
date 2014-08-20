@@ -1,0 +1,10 @@
+[hosts:children]
+memcacheservers
+
+[memcacheservers]
+memcache01.example.org nodeid=1
+memcache02.example.org nodeid=2
+memcache03.example.org nodeid=3
+
+[local]
+localhost ansible_connection=local

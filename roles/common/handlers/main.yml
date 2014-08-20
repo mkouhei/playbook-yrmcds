@@ -1,0 +1,25 @@
+---
+# roles/common/handlers/main.yml
+
+- name: start sysstat
+  service: name=sysstat state=started
+  tags:
+    - sysstat
+
+- name: save state with etckeeper
+  command: etckeeper commit "Commit by ansible, saving state."
+  ignore_errors: True
+  tags:
+    - etckeeper
+    - etckeeper-commit
+
+- name: repack git directory
+  command: git gc chdir=/etc
+  ignore_errors: True
+  tags:
+    - etckeeper
+    - etckeeper-gc
+
+- name: initialize etckeeper
+  command: etckeeper init creates=/etc/.git/config
+  tags: etckeeper

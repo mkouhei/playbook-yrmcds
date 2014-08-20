@@ -1,0 +1,6 @@
+---
+# file: roles/common/tasks/main.yml
+
+- include: packages.yml
+- include: sysstat.yml
+- include: etckeeper.yml

@@ -1,0 +1,65 @@
+---
+# roles/pacemaker/tasks/pacemaker.yml
+
+- name: be sure packages are installed
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - pacemaker
+  tags:
+    - packages
+    - pacemaker
+
+- name: be sure pacemaker is enabled
+  service: name=pacemaker state=running enabled=yes
+  tags:
+    - pacemaker
+ 
+- name: be sure stonith is disabled
+  pacemaker: >-
+    property no-quorum-policy="freeze" stonith-enabled="false" expected-quoram-votes="2"
+  notify:
+    - crm commit
+
+- name: be sure check IP address version of virtual_ip
+  shell: |
+    python -c "import netaddr; print(netaddr.IPAddress('{{ virtual_ip }}').version)"
+  connection: local
+  sudo: no
+  register: ip_version
+
+- name: be sure floating IPv4 is defined
+  pacemaker: >-
+    primitive yrmcds_vip ocf:heartbeat:IPaddr2
+    params ip="{{ virtual_ip }}" cidr_netmask="{{ cidr_netmask }}" nic="eth0" op monitor interval="20s"
+    state=present
+  when: ip_version.stdout == "4"
+  notify:
+    - crm commit
+  tags:
+    - ipv4
+
+- name: be sure floating IPv4 and yrmcds process are grouped
+  pacemaker: >-
+    group yrmcds_vip yrmcds_proc
+  when: ip_version.stdout == "4"
+  notify:
+    - crm commit
+  tags:
+    - ipv4
+
+#- name: be sure source IP is defined
+#  command: ip rule add from 
+#  when: ip_version.stdout == "6"
+#  tags:
+#  - ipv6
+
+- name: be sure floating IPv6 is defined
+  pacemaker: >-
+    primitive yrmcds_vip ocf:heartbeat:IPv6addr
+    params ipv6addr="{{ virtual_ip }}" cidr_netmask="{{ cidr_netmask }}" nic="eth0" op monitor interval="20s"
+    state=present
+  when: ip_version.stdout == "6"
+  notify:
+    - crm commit
+  tags:
+    - ipv6

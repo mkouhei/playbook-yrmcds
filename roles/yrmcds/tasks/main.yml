@@ -1,0 +1,4 @@
+---
+# roles/yrmcds/tasks/main.yml
+
+- include: yrmcds.yml

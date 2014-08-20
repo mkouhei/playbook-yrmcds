@@ -1,0 +1,7 @@
+---
+- hosts: memcacheservers
+  sudo: yes
+  roles:
+    - common
+    - pacemaker
+    - yrmcds

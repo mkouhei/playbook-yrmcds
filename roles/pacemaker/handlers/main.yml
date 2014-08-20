@@ -1,0 +1,16 @@
+---
+# roles/pacemaker/handlers/main.yml
+
+- name: restart corosync
+  service: name=corosync state=restarted
+  notify: restart pacemaker
+  tags:
+    - corosync
+
+- name: restart pacemaker
+  service: name=pacemaker state=restarted
+  tags:
+    - pacemaker
+
+- name: crm commit
+  pacemaker: commit

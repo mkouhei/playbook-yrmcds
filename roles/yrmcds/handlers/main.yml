@@ -1,0 +1,7 @@
+---
+# roles/yrmcds/handlers/main.yml
+
+- name: restart yrmcds
+  service: name=yrmcds state=restarted
+  tags:
+    - yrmcds

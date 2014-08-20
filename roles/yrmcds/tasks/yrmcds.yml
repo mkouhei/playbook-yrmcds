@@ -1,0 +1,38 @@
+---
+# roles/yrmcds/tasks/yrmcds.yml
+
+- name: be sure packages are installed
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - yrmcds
+  tags:
+    - packages
+    - yrmcds
+
+- name: be sure packages are removed
+  apt: pkg={{ item }} state=absent
+  with_items:
+    - keepalived
+    - ipvsadm
+  tags:
+    - packages
+
+- name: be sure check IP address version of virtual_ip
+  shell: |
+    python -c "import netaddr; print(netaddr.IPAddress('{{ virtual_ip }}').version)"
+  connection: local
+  sudo: no
+  register: ip_version
+
+- name: be sure yrmcds is configured
+  template: src=yrmcds.conf.j2 dest=/etc/yrmcds.conf
+  notify:
+    - restart yrmcds
+  tags:
+    - configure
+    - yrmcds
+
+- name: be sure yrmcds is enabled
+  service: name=yrmcds state=running enabled=yes
+  tags:
+    - yrmcds

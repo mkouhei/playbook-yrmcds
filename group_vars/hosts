@@ -1,0 +1,7 @@
+# IPv6 link-local unicast address
+virtual_ip: fe80::1234:dead:beaf
+cidr_netmask: 64
+
+# IPv4 address
+#virtual_ip: 192.0.2.100
+#cidr_netmask: 24

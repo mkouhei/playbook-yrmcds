@@ -1,0 +1,21 @@
+---
+# roles/common/tasks/packages.yml
+
+- name: Upgrade all packages
+  apt: upgrade=full update_cache=yes
+  tags: packages
+
+- name: be sure packages are installed
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - dstat
+    - python-backup2swift
+    - lv
+  tags: packages
+
+- name: be sure packages are removed
+  apt: pkg={{ item }} state=absent
+  with_items:
+    - nano
+  tags:
+    - packages

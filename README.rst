@@ -12,12 +12,13 @@ Requirements
 ------------
 
 * Edit inventory file `hosts` and variable file `group_vars/hosts`.
-* Generate a new authkey formatted binary on local.
+* Generate a new authkey formatted binary on local, and copy roles/pacemaker/files
 * Install packages on local as follows;
 
   * Git
   * ansible (>= 1.5)
   * python-apt
+  * python-netaddr
 
 * git clone this repository, initialize library directory as submodule.::
 

@@ -1,0 +1,71 @@
+# Please read the corosync.conf.5 manual page
+totem {
+	version: 2
+	crypto_cipher: aes256
+	crypto_hash: sha1
+    token: 1000
+    token_retransmits_before_loss_const: 4
+    join: 50
+    consensus: 1200
+    heartbeat_failures_allowed: 1
+    vsftype: ykd
+    max_messages: 17
+    rrp_mode: none
+    transport: udpu
+    ip_version: ipv6
+    interface {
+        ringnumber: 0
+{% if ip_version.stdout == "4" %}
+        bindnetaddr: {{ ansible_eth0.ipv4.address }}
+{% elif ip_version.stdout == "6" %}
+{% for i in ansible_eth0.ipv6 %}
+{% if i.scope == "link" %}
+        bindnetaddr: {{ i.address }}
+{% endif %}
+{% endfor %}
+{% endif %}
+        #mcastport: 5405
+        ttl: 1
+    }
+}
+
+logging {
+    fileline: off
+    to_stderr: no
+    to_logfile: yes
+    logfile: /var/log/corosync/corosync.log
+    to_syslog: yes
+    debug: off
+    timestamp: on
+    logger_subsys {
+        subsys: QUORUM
+        debug: off
+
+    }
+}
+
+quorum {
+    provider: corosync_votequorum
+}
+
+nodelist {
+{% if ip_version.stdout == "4" %}
+{% for host in groups["hosts"] %}
+   node {
+        ring0_addr: {{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}
+        nodeid: {{ hostvars[host] }}
+   }
+{% endfor %}
+{% elif ip_version.stdout == "6" %}
+{% for host in groups["hosts"] %}
+{% for i in hostvars[host]['ansible_eth0']['ipv6'] %}
+{% if i.scope == 'link' %}
+   node {
+        ring0_addr: {{ i.address }}
+        nodeid: {{ hostvars[host]['nodeid'] }}
+   }
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+}

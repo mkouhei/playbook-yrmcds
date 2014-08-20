@@ -1,0 +1,5 @@
+---
+# roles/pacemaker/tasks/main.yml
+
+- include: corosync.yml
+- include: pacemaker.yml
