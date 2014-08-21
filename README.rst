@@ -5,7 +5,7 @@
 Purpose
 -------
 
-This playbook is prepared for the `yrmcds <http://cybozu.github.io/yrmcds/`_ cluster with corosync and pacemaker. This playbook supports IPv6 link-local unicast address or IPv4 address for virtual IP address for yrmcds, and floating IP address for Pacemaker.
+This playbook is prepared for the `yrmcds <http://cybozu.github.io/yrmcds/>`_ cluster with corosync and pacemaker. This playbook supports IPv6 link-local unicast address or IPv4 address for virtual IP address for yrmcds, and floating IP address for Pacemaker.
 
 
 Requirements
