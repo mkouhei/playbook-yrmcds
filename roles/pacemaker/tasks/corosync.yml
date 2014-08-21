@@ -29,12 +29,58 @@
     - configure
     - corosync
 
+- name: obtain th stats of /etc/corosync/authkey
+  stat: path=/etc/corosync/authkey
+  register: st
+  tags:
+    - corosync
+
+- name: generate authkey
+  shell: |
+    corosync-keygen
+  when: ansible_fqdn == "{{ groups['hosts'][0] }}" and "{{ st.stat.exists }}" == "False"
+  delegate_to: "{{ groups['hosts'][0] }}"
+  tags:
+    - corosync
+
+- name: copy temporary file of authkey
+  shell: |
+    cp -f /etc/corosync/authkey /tmp/authkey
+    chmod +r /tmp/authkey
+  when: ansible_fqdn == "{{ groups['hosts'][0] }}"
+  tags:
+    - corosync
+
+- name: retrieve authkey
+  shell: |
+    scp {{ groups['hosts'][0] }}:/tmp/authkey roles/pacemaker/files/authkey
+  sudo: no
+  connection: local
+  when: ansible_fqdn == "{{ groups['hosts'][0] }}"
+  tags:
+    - corosync
+
+- name: remove temporary authkey file
+  file: path=/tmp/authkey state=absent
+  when: ansible_fqdn == "{{ groups['hosts'][0] }}"
+  tags:
+    - corosync
+
 - name: be sure corosync authkey is configured
   copy: src=authkey dest=/etc/corosync/authkey owner=root group=root mode=0400
+  when: ansible_fqdn != "{{ groups['hosts'][0] }}"
   notify:
     - restart corosync
   tags:
     - configure
+    - corosync
+
+- name: be sure corosync authkey on local is absent
+  shell: |
+    rm -f roles/pacemaker/files/authkey
+  sudo: no
+  connection: local
+  tags:
     - corosync
 
 - name: be sure corosync is enabled
