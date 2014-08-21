@@ -27,6 +27,8 @@ Requirements
     $ git submodule init
     $ git submodule update
 
+* It is required to applied applied `supporting IPv6 link-local unicast address patch <https://github.com/cybozu/yrmcds/commit/ff98d27443915a1c031a5a87733edf109efbf4af>`_ to yrmcds. `Debian official package <https://packages.qa.debian.org/y/yrmcds.html>`_ 1.0.4-5 over is applied this patch.
+
 Restrictions
 ------------
 
