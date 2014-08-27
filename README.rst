@@ -27,7 +27,7 @@ Requirements
     $ git submodule init
     $ git submodule update
 
-* It is required to applied applied `supporting IPv6 link-local unicast address patch <https://github.com/cybozu/yrmcds/commit/ff98d27443915a1c031a5a87733edf109efbf4af>`_ to yrmcds. `Debian official package <https://packages.qa.debian.org/y/yrmcds.html>`_ 1.0.4-5 over is applied this patch.
+* It is required to applied applied `supporting IPv6 link-local unicast address patch <https://github.com/cybozu/yrmcds/commit/ff98d27443915a1c031a5a87733edf109efbf4af>`_ and `Drop AI_ADDRCONFIG to support IPv6 link-local address only environment <https://github.com/cybozu/yrmcds/commit/2856dcbf928f73b9154674d05e96a5e2c2b4f30b>`_ and `Make tcp_connect() work in IPv6 only env <https://github.com/cybozu/yrmcds/commit/1ca41fe59004adb8fd2618b0f01e7db478cdfb66>`_ to yrmcds. `Debian official package <https://packages.qa.debian.org/y/yrmcds.html>`_ 1.0.4-6 over is applied this patch.
 
 Restrictions
 ------------
